@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
+import java.sql.*;
 
 
 
@@ -61,7 +62,6 @@ public class MainController {
             Post post = new Post();
             entityParametres = new entityParametres(text1, text2);
             entityParametres.Reverse();
-            //post.setId(5);
             post.setFstring(entityParametres.getFirstLine());
             post.setSstring(entityParametres.getSecondLine());
             postRepository.save(post);
@@ -74,8 +74,20 @@ public class MainController {
 //
 //            Thread listOutputThread = new Thread(ListOutputRunner2);
 //            listOutputThread.start();
+            String url = "jdbc:mysql://localhost:3306/test_db?useUnicode=true&serverTimezone=UTC";
+            String username = "root";
+            String password = "3366";
+            Connection conn = DriverManager.getConnection(url, username, password);
+            String sql = "INSERT INTO test_table2 (fstring, sstring) Values (?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            for(int num = 0; num < 2; num++) {
+                preparedStatement.setString(1, "frombatchf" + num);
+                preparedStatement.setString(2, "second" + num);
+                preparedStatement.addBatch();
+            }
+            preparedStatement.executeBatch();
         }
-        catch(InputDataException ex){
+        catch(Exception ex){
             model.addAttribute("error", ex.getMessage());
             fileWorker.write(ERRORDATABASE, ex.getMessage());
             Thread errorOutputThread = new Thread(new ErrorsOutputRunner(fileWorker));
