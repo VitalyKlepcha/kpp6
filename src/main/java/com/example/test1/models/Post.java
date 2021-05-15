@@ -3,41 +3,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-/**
- * Post.
- *
- * @author Vitaliy Klepcha
- */
-/*
-@Entity
-@Table(schema = "test_db", name = "test_table1")
-public class Post {
-    @Id
-    @Column(name = "id")
-    private String id;
 
-    @Column(name = "name")
-    private String name;
-
-    public Post() { }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-}
-*/
 
 @Entity
 @Table(schema = "test_db", name = "test_table2")

@@ -10,7 +10,9 @@ import com.example.test1.service.ReverseService;
 import com.example.test1.service.SortListService;
 import com.example.test1.threads.ErrorsOutputRunner;
 import com.example.test1.threads.ListOutputRunner;
+import com.example.test1.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.sql.*;
+import javax.persistence.*;
 
 
 
@@ -31,6 +34,8 @@ public class MainController {
     private ArrayList<entityParametres> list;
     private ListWorkerService listWorkerService;
     private PostRepository postRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     public MainController(
@@ -65,6 +70,8 @@ public class MainController {
             post.setFstring(entityParametres.getFirstLine());
             post.setSstring(entityParametres.getSecondLine());
             postRepository.save(post);
+            //entityManager.persist(post);
+
             //listWorkerService.AddObject(list, entityParametres);
 //            Runnable ListOutputRunner2 = () -> {
 //                for (entityParametres el : list) {
@@ -74,18 +81,18 @@ public class MainController {
 //
 //            Thread listOutputThread = new Thread(ListOutputRunner2);
 //            listOutputThread.start();
-            String url = "jdbc:mysql://localhost:3306/test_db?useUnicode=true&serverTimezone=UTC";
-            String username = "root";
-            String password = "3366";
-            Connection conn = DriverManager.getConnection(url, username, password);
-            String sql = "INSERT INTO test_table2 (fstring, sstring) Values (?, ?)";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            for(int num = 0; num < 2; num++) {
-                preparedStatement.setString(1, "frombatchf" + num);
-                preparedStatement.setString(2, "second" + num);
-                preparedStatement.addBatch();
-            }
-            preparedStatement.executeBatch();
+//            String url = "jdbc:mysql://localhost:3306/test_db?useUnicode=true&serverTimezone=UTC";
+//            String username = "root";
+//            String password = "3366";
+//            Connection conn = DriverManager.getConnection(url, username, password);
+//            String sql = "INSERT INTO test_table2 (fstring, sstring) Values (?, ?)";
+//            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+//            for(int num = 0; num < 3; num++) {
+//                preparedStatement.setString(1, "frombatchf" + num);
+//                preparedStatement.setString(2, "second" + num);
+//                preparedStatement.addBatch();
+//            }
+//            preparedStatement.executeBatch();
         }
         catch(Exception ex){
             model.addAttribute("error", ex.getMessage());
